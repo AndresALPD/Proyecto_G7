@@ -1,0 +1,132 @@
+/* Esto es un comentario */
+/*section p {
+    color: blue;
+}
+
+aside p {
+    color: red;
+}
+
+h1, h2, h3 {
+    font-family: cursive;
+}
+
+.aviso {
+    background-color: red;
+    color: yellow;
+}*/
+
+/*nav a {
+    text-decoration: none;
+    background-color: green;
+    color: white;
+}
+
+nav a:hover {
+    background-color: red;
+    color: yellow;
+}*/
+
+tr:nth-child(odd){
+    background-color: #4b75d9;
+    color: yellow;
+}
+
+tr:nth-child(even){
+    background-color: #addc4b;
+    color: yellow;
+}
+
+thead tr th{
+    background-color: black;
+    color: white;
+}
+
+body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 90px 20px 0;
+    background-color: whitesmoke;
+}
+
+.header{
+    position: fixed;
+    background-color: #076AF0;
+    top: 0;
+    left: 0;
+    height: 90px;
+    width: 100%;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    padding: 0 40px;
+    line-height: 90px;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    margin-right: 40px;
+}
+
+.nav-menu-item {
+    font-size: 18px;
+    margin: 0 10px;
+    line-height: 90px;
+}
+
+.nav-menu-link {
+    padding: 8px 12px;
+    transition: 0.5s
+}
+
+.nav-menu-link:hover {
+    background-color: #024070;
+    border-radius: 10px;
+    transition: 0.5s
+}
+
+aside{
+    position: fixed;
+    background-color: bisque;
+    top: 90px;
+    left: 0;
+    bottom: 20px;
+    width: 20%;
+}
+
+section{
+    overflow-y: scroll; 
+    position: fixed;
+    background-color: aquamarine;
+    top: 90px;
+    left: 20%;
+    bottom: 20px;
+    width: 80%;
+}
+
+footer{
+    text-align: center;
+    position: fixed;
+    background-color: black;
+    color: white;
+    left: 0;
+    bottom: 0;
+    height: 20px;
+    width: 100%;
+}
+
+
