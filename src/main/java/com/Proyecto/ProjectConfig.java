@@ -34,5 +34,7 @@ public class ProjectConfig implements WebMvcConfigurer{
     @Override
     public void addInterceptors(InterceptorRegistry registro){
         registro.addInterceptor(localeChangeInterceptor());
-    }                
+    }
+    
+    ///estaesunaprueba
 }
