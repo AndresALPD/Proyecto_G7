@@ -1,3 +1,5 @@
+--Base de datos nombre Proyecto
+
 drop schema if exists proyecto;
 drop user if exists usuario_proyecto;
 CREATE SCHEMA proyecto;
