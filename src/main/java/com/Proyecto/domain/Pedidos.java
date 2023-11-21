@@ -21,9 +21,9 @@ public class Pedidos implements Serializable{
     private String rutaImagen;
     private boolean pagado;
 
-//    @OneToMany
-//    @JoinColumn(name="id_pedidos", updatable = false)
-//    private List<Producto>  productos;
+    @OneToMany
+    @JoinColumn(name="id_pedido", updatable = false)
+    private List<Producto>  productos;
     
     
 }

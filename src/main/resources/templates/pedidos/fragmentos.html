@@ -75,19 +75,19 @@
                                 <table class="table table-bordered table-hover">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Descripción</th>
-                                            <th scope="col">Estado</th>
-                                            <th scope="col"></th>
+                                            <th class="align-middle">#</th>
+                                            <th class="align-middle">Descripción</th>
+                                            <th class="align-middle">Estado</th>
+                                            <th class="align-middle"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr th:each="pedidos, contador : ${pedidoss}">
-                                            <td th:text="${contador.count}"></td>
-                                            <td th:text="${pedidos.descripcion}"></td>
-                                            <td th:text="${pedidos.pagado} ? 'Pagado' : 'Sin pagar'"></td>
-                                            <td>
-                                                <a th:href="@{/pedidos/eliminar/}+${pedidos.idPedido}" class="btn btn-danger btn-sm my-1 ">
+                                            <td class="align-middle" th:text="${contador.count}"></td>
+                                            <td class="align-middle" th:text="${pedidos.descripcion}"></td>
+                                            <td class="align-middle" th:text="${pedidos.pagado} ? 'Pagado' : 'Sin pagar'"></td>
+                                            <td class="align-middle">
+                                                <a th:href="@{/pedidos/eliminar/}+${pedidos.idPedido}" class="btn btn-danger btn-sm my-1">
                                                     <i class="fas fa-trash"></i> Eliminar</a>
                                                 <a th:href="@{/pedidos/modificar/}+${pedidos.idPedido}" class="btn btn-success btn-sm my-1">
                                                     <i class="fas fa-pencil-alt"></i> Actualizar</a>
@@ -101,7 +101,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
@@ -163,25 +162,25 @@
 
         <!-- 5 Fragmento que se utiliza en el fragmento anterior -->
         <section th:fragment="botonesEditar">
-    <div class="container py-4 mb-4">
-        <div class="row">
-            <div class="col-md-4 text-center mb-1">
-                <a th:href="@{/pedidos/listado}" class="btn btn-outline-primary">
-                    <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
-                </a>
+            <div class="container py-4 mb-4">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-1">
+                        <a th:href="@{/pedidos/listado}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-center mb-1">
+                        <a th:href="@{/pedidos/eliminar/}+${pedidos.idPedido}" class="btn btn-outline-danger">
+                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-center mb-1">
+                        <button type="submit" class="btn btn-outline-success">
+                            <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4 text-center mb-1">
-                <a th:href="@{/pedidos/eliminar/}+${pedidos.idPedido}" class="btn btn-outline-danger">
-                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
-                </a>
-            </div>
-            <div class="col-md-4 text-center mb-1">
-                <button type="submit" class="btn btn-outline-success">
-                    <i class="fas fa-check"></i> [[#{accion.guardar}]]
-                </button>
-            </div>
-        </div>
-    </div>
-</section>
+        </section>
     </body>
 </html>

@@ -11,7 +11,6 @@ flush privileges;
 
 CREATE TABLE proyecto.pedidos (
     id_pedido INT PRIMARY KEY AUTO_INCREMENT,
-    fecha_pedido DATE NOT NULL,
     descripcion VARCHAR(30) NOT NULL,  
     ruta_imagen varchar(1024),
     pagado bool
@@ -19,19 +18,19 @@ CREATE TABLE proyecto.pedidos (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
-INSERT INTO proyecto.pedidos (id_pedido, fecha_pedido, descripcion, ruta_imagen, pagado) VALUES
-('1','2023-01-15','Pedido de Andrés','https://cdn-icons-png.flaticon.com/512/5556/5556493.png', true),
-('2','2023-01-16','Pedido de Pablo', 'https://cdn-icons-png.flaticon.com/512/5556/5556499.png', true),
-('3','2023-01-17','Pedido de Kevin', 'https://cdn-icons-png.flaticon.com/512/5556/5556468.png', true),
-('4','2023-01-18','Pedido de Wilbert', 'https://cdn-icons-png.flaticon.com/512/5556/5556512.png', true),
-('5','2023-01-19','Pedido de Raúl', 'https://cdn-icons-png.flaticon.com/512/5556/5556529.png', true);
+INSERT INTO proyecto.pedidos (id_pedido, descripcion, ruta_imagen, pagado) VALUES
+('1','Pedido de Andrés','https://cdn-icons-png.flaticon.com/512/5556/5556493.png', true),
+('2','Pedido de Pablo', 'https://cdn-icons-png.flaticon.com/512/5556/5556499.png', true),
+('3','Pedido de Kevin', 'https://cdn-icons-png.flaticon.com/512/5556/5556468.png', true),
+('4','Pedido de Wilbert', 'https://cdn-icons-png.flaticon.com/512/5556/5556512.png', true),
+('5','Pedido de Raúl', 'https://cdn-icons-png.flaticon.com/512/5556/5556529.png', true);
 
-CREATE TABLE proyecto.productos (
+CREATE TABLE proyecto.producto (
     id_producto INT PRIMARY KEY AUTO_INCREMENT,
     id_pedido INT NOT NULL,
     nombre VARCHAR(200) NOT NULL,
     descripcion TEXT,
-    precio DECIMAL(10, 2) NOT NULL,
+    precio DOUBLE,
     cantidad INT NOT NULL,
     ruta_imagen varchar(1024),
     stock bool,
@@ -40,7 +39,7 @@ CREATE TABLE proyecto.productos (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
-INSERT INTO proyecto.productos (id_producto, id_pedido, nombre, descripcion, precio, cantidad, ruta_imagen, stock) VALUES
+INSERT INTO proyecto.producto (id_producto, id_pedido, nombre, descripcion, precio, cantidad, ruta_imagen, stock) VALUES
 (1, 1, 'Mancuerna Athletic Works De Hule - 25lb', 'Color:Negro Deporte:Pesas',12400, 10, 'https://walmartcr.vtexassets.com/arquivos/ids/241004-800-600?v=637696508909530000&width=800&height=600&aspect=true', true),
 (2, 1, '3 Pack Atún Calvo Trocitos Aceite -426gr', 'Precio Especial',2800, 5, 'https://walmartcr.vtexassets.com/arquivos/ids/226247-800-600?v=637655121158870000&width=800&height=600&aspect=true', true),
 (3, 1, '2 Pack Refresco Tropical Cero Frutos Blancos -2500ml', 'Oferta Unica', 2120, 20, 'https://walmartcr.vtexassets.com/arquivos/ids/374700-800-600?v=638084758082800000&width=800&height=600&aspect=true', true),
@@ -58,3 +57,17 @@ INSERT INTO proyecto.productos (id_producto, id_pedido, nombre, descripcion, pre
 (15, 5, 'Pelotas de tenis Athletic works. Modelo WCO2101', 'Pelotas de tenis, 15 piezas por juego', 5500, 10, 'https://walmartcr.vtexassets.com/arquivos/ids/344848-800-600?v=637998251332500000&width=800&height=600&aspect=true', true);
 
 
+create table proyecto.rol (
+  id_rol INT NOT NULL AUTO_INCREMENT,
+  nombre varchar(20),
+  id_usuario int,
+  PRIMARY KEY (id_rol),
+  foreign key fk_rol_usuario (id_usuario) references usuario(id_usuario)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+insert into proyecto.rol (id_rol, nombre, id_usuario) values
+ (1,'ROLE_ADMIN',1), (2,'ROLE_VENDEDOR',1), (3,'ROLE_USER',1),
+ (4,'ROLE_VENDEDOR',2), (5,'ROLE_USER',2),
+ (6,'ROLE_USER',3);
