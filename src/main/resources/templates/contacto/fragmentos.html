@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>ProyectoG7</title>
+    </head>
+    <body>
+
+        <section th:fragment="informacionContacto" id="informacionContacto">
+            <div class="container">
+                <div class="row">
+                    <div th:each="contacto : ${contactos}" class="card">
+                        <!-- Tarjeta para el campo "Nosotros" (descripcion) -->
+                        <div class="card-body">
+                            <h5 class="card-title">Nosotros</h5>
+                            <p class="card-text" th:text="${contacto.descripcion}"></p>
+                        </div>
+                    </div>
+
+                    <!-- Otras tarjetas para otros campos del contacto -->
+                    <div th:each="contacto : ${contactos}" class="card">
+                        <!-- Tarjeta para el campo "Numero de Telefono" (telefono) -->
+                        <div class="card-body">
+                            <h5 class="card-title">Numero de Telefono</h5>
+                            <p class="card-text" th:text="${contacto.telefono}"></p>
+                        </div>
+                    </div>
+
+                    <div th:each="contacto : ${contactos}" class="card">
+                        <!-- Tarjeta para el campo "Ubicacion" (ubicacion) -->
+                        <div class="card-body">
+                            <h5 class="card-title">Ubicacion</h5>
+                            <!-- Usar un iframe para mostrar la ubicación -->
+                            <iframe th:src="${contacto.ubicacion}" width="100%" height="200" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+                        </div>
+                    </div>
+
+                    <div th:each="contacto : ${contactos}" class="card">
+                        <!-- Tarjeta para el campo "Horario" (horario) -->
+                        <div class="card-body">
+                            <h5 class="card-title">Horario</h5>
+                            <p class="card-text" th:text="${contacto.horario}"></p>
+                        </div>
+                    </div>
+
+                    <div th:each="contacto : ${contactos}" class="card">
+                        <!-- Tarjeta para el campo "Redes" (redes) -->
+                        <div class="card-body">
+                            <h5 class="card-title">Redes Sociales</h5>
+                            <!-- Hacer que el nombre de la red social sea un enlace -->
+                            <p class="card-text">
+                                <a th:href="${contacto.redes}" target="_blank" rel="noopener noreferrer">
+                                    Facebook
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div> 
+            </div> 
+        </section>
+        
+        
+        
+        
+    </body>
+
+</html>
