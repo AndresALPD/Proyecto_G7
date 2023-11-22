@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>ProyectoG7</title>
+    </head>
+    <body>
+        <!-- 1 Sección para crear el boton de agregar... llamará a una ventana modal-->
+        <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3"> <!-- sec:authorize="hasRole('ROLE_ADMIN')"-->
+                        <button 
+                            type="button" 
+                            class="btn btn-primary btn-block" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#agregarResena">
+                            <i class="fas fa-plus"></i> [[#{resena.agregar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2 Ventana modal para agregar resenas -->
+        <section th:fragment="agregarResena">
+            <div id="agregarResena" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title">Agregar Resena</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form th:action="@{/resenas/guardar}" th:object="${resenas}" method="POST" class="was-validated">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="calificacion">Calificación</label>
+                                    <select class="form-select" aria-label="Default select example" name="calificacion" required="true">
+                                        <option value="1">1 Estrella</option>
+                                        <option value="2">2 Estrellas</option>
+                                        <option value="3">3 Estrellas</option>
+                                        <option value="4">4 Estrellas</option>
+                                        <option value="5">5 Estrellas</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="titulo">Título de la Resena</label>
+                                    <input type="text" class="form-control" name="titulo" required="true"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="comentario">Comentario</label>
+                                    <textarea class="form-control" name="comentario" rows="4" required="true"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 Sección principal para mostrar la informacion de la entidad resena -->
+        <section th:fragment="listadoResenas" id="resenas">
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-dark text-white">
+                                <h4 class="mb-0">Listado de Resenas</h4>
+                            </div>
+                            <div th:if="${resenas != null and not #lists.isEmpty(resenas)}">
+                                <table class="table table-bordered table-hover">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th class="align-middle">#</th>
+                                            <th class="align-middle">Calificación</th>
+                                            <th class="align-middle">Título</th>
+                                            <th class="align-middle">Comentario</th>
+                                            <th class="align-middle">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="resena, contador : ${resenas}">
+                                            <td class="align-middle">[[${contador.count}]]</td>
+                                            <td class="align-middle">[[${resena.calificacion}]]</td>
+                                            <td class="align-middle">[[${resena.titulo}]]</td>
+                                            <td class="align-middle">[[${resena.comentario}]]</td>
+                                            <td class="align-middle">
+                                                <a th:href="@{/resenas/eliminar/}+${resena.idResena}" class="btn btn-danger btn-sm my-1">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </a>
+                                                <a th:href="@{/resenas/modificar/}+${resena.idResena}" class="btn btn-success btn-sm my-1">
+                                                    <i class="fas fa-pencil-alt"></i> Editar
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-3" th:if="${resenas == null or #lists.isEmpty(resenas)}">
+                                <span>No hay resenas disponibles.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección para mostrar el total de resenas -->
+        <section th:fragment="total" id="totalResenas" class="text-center my-4">
+            <div class="col-md-4 mx-auto mb-5">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h3 class="card-title">Total Resenas</h3>
+                        <h4 class="card-text fs-2" th:text="${totalResenas}">
+                            <i class="fas fa-shopping-basket"></i> <!-- Puedes cambiar el ícono según tu preferencia -->
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 4 Fragmento que se utiliza en la página modifica.html -->
+        <section th:fragment="editarResenas">
+            <div class="container mt-3 mb-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <form method="POST" th:action="@{/resenas/guardar}" th:object="${resena}" class="was-validated" enctype="multipart/form-data">
+                            <input type="hidden" name="idResena" th:field="*{idResena}" />
+                            <section th:replace="~{resenas/fragmentos :: botonesEditar}" />
+
+                            <div id="details">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>[[#{accion.actualizar}]]</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="calificacion">Calificación</label>
+                                            <select class="form-select" aria-label="Default select example" name="calificacion" th:field="*{calificacion}" required="true">
+                                                <option value="1">1 Estrella</option>
+                                                <option value="2">2 Estrellas</option>
+                                                <option value="3">3 Estrellas</option>
+                                                <option value="4">4 Estrellas</option>
+                                                <option value="5">5 Estrellas</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="titulo">Título de la Resena</label>
+                                            <input type="text" class="form-control" name="titulo" th:field="*{titulo}" required="true" />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="comentario">Comentario</label>
+                                            <textarea class="form-control" name="comentario" rows="4" th:field="*{comentario}" required="true"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 Fragmento que se utiliza en el fragmento anterior -->
+        <section th:fragment="botonesEditar">
+            <div class="container py-4 mb-4">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-1">
+                        <a th:href="@{/resenas/listado}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-center mb-1">
+                        <a th:href="@{/resenas/eliminar/}+${resena.idResena}" class="btn btn-outline-danger">
+                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-center mb-1">
+                        <button type="submit" class="btn btn-outline-success">
+                            <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>

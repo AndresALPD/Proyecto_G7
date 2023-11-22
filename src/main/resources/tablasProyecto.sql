@@ -72,6 +72,20 @@ INSERT INTO proyecto.contacto (id_contacto, descripcion, telefono, ubicacion, ho
   '8572 8468', 'https://www.openstreetmap.org/note/3998061#map=18/9.85816/-83.94015&layers=N',
   'De Lunes a Domingo de 5:30 p.m a 10:30 p.m', 'https://www.facebook.com/sodadivinonino/?locale=es_LA');
 
+CREATE TABLE proyecto.resenas (
+    id_resena INT PRIMARY KEY AUTO_INCREMENT,
+    calificacion INT,
+    titulo VARCHAR(255),
+    comentario TEXT
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4;
+
+INSERT INTO proyecto.resenas (calificacion, titulo, comentario) VALUES
+(5, 'Excelente producto', 'Me encanta este producto, excelente.'),
+(4, 'Bueno', 'Lo recomiendo.'),
+(3, 'Regular', 'No es mi favorito.');
+
 create table proyecto.rol (
   id_rol INT NOT NULL AUTO_INCREMENT,
   nombre varchar(20),
