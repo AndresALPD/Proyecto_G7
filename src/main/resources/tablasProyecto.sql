@@ -56,6 +56,21 @@ INSERT INTO proyecto.producto (id_producto, id_pedido, nombre, descripcion, prec
 (14, 5, 'Sillón Mainstays, Reclinable Doble Blackberry', 'Sillón Mainstays, Reclinable Doble Blackberry', 229900, 5, 'https://walmartcr.vtexassets.com/arquivos/ids/456375-800-600?v=638319549704070000&width=800&height=600&aspect=true', true),
 (15, 5, 'Pelotas de tenis Athletic works. Modelo WCO2101', 'Pelotas de tenis, 15 piezas por juego', 5500, 10, 'https://walmartcr.vtexassets.com/arquivos/ids/344848-800-600?v=637998251332500000&width=800&height=600&aspect=true', true);
 
+CREATE TABLE proyecto.contacto (
+    id_contacto INT PRIMARY KEY AUTO_INCREMENT,
+    descripcion TEXT,
+    telefono text,
+    ubicacion varchar(1024),
+    horario text,
+    redes varchar(1024)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+INSERT INTO proyecto.contacto (id_contacto, descripcion, telefono, ubicacion, horario, redes) VALUES
+(1, 'Desde su humilde inicio en [Año de Fundación], [Nombre de la Tienda] ha evolucionado en una vibrante experiencia gastronómica, fusionando la autenticidad de los sabores con un compromiso inquebrantable con la frescura y la calidad, celebrando la diversidad culinaria y creando recuerdos deliciosos en cada bocado.', 
+  '8572 8468', 'https://www.openstreetmap.org/note/3998061#map=18/9.85816/-83.94015&layers=N',
+  'De Lunes a Domingo de 5:30 p.m a 10:30 p.m', 'https://www.facebook.com/sodadivinonino/?locale=es_LA');
 
 create table proyecto.rol (
   id_rol INT NOT NULL AUTO_INCREMENT,
