@@ -86,15 +86,31 @@ INSERT INTO proyecto.resenas (calificacion, titulo, comentario) VALUES
 (4, 'Bueno', 'Lo recomiendo.'),
 (3, 'Regular', 'No es mi favorito.');
 
+CREATE TABLE proyecto.usuario (
+  id_usuario INT NOT NULL AUTO_INCREMENT,
+  username varchar(20) NOT NULL,
+  password varchar(512) NOT NULL,
+  nombre VARCHAR(20) NOT NULL,
+  apellidos VARCHAR(30) NOT NULL,
+  correo VARCHAR(25) NULL,
+  telefono VARCHAR(15) NULL,
+  ruta_imagen varchar(1024),
+  activo boolean,
+  PRIMARY KEY (`id_usuario`));
+
+INSERT INTO proyecto.usuario (id_usuario, username, password, nombre, apellidos, correo, telefono, ruta_imagen, activo)
+VALUES 
+(1, 'luis', '202cb962ac59075b964b07152d234b70', 'Luis', 'Pérez', 'luisperez@gmail.com', '123456789', 'https://static.vecteezy.com/system/resources/previews/001/131/187/non_2x/serious-man-portrait-real-people-high-definition-grey-background-photo.jpg', true),
+(2, 'laura', '250cf8b51c773f3f8dc8b4be867a9a02', 'Laura', 'López', 'lauralopez@gmail.com', '987654321', 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?cs=srgb&dl=pexels-andrea-piacquadio-774909.jpg&fm=jpg', true),
+(3, 'valeria', '68053af2923e00204c3ca7c6a3150cf7', 'Valeria', 'Gómez', 'valeriagomez@gmail.com', '555555555', 'https://pymstatic.com/5844/conversions/personas-emocionales-wide.jpg', true);
+
 create table proyecto.rol (
   id_rol INT NOT NULL AUTO_INCREMENT,
   nombre varchar(20),
   id_usuario int,
   PRIMARY KEY (id_rol),
   foreign key fk_rol_usuario (id_usuario) references usuario(id_usuario)
-)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
+);
 
 insert into proyecto.rol (id_rol, nombre, id_usuario) values
  (1,'ROLE_ADMIN',1), (2,'ROLE_VENDEDOR',1), (3,'ROLE_USER',1),

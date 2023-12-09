@@ -8,7 +8,7 @@
     <body>
         <!-- 1 Sección para crear el boton de agregar... llamará a una ventana modal-->
         <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
-            <div class="container">
+            <div class="container" sec:authorize="hasRole('ROLE_ADMIN')" >
                 <div class="row">
                     <div class="col-md-3"> <!-- sec:authorize="hasRole('ROLE_ADMIN')"-->
                         <button 
@@ -81,7 +81,8 @@
                                             <th class="align-middle">Calificación</th>
                                             <th class="align-middle">Título</th>
                                             <th class="align-middle">Comentario</th>
-                                            <th class="align-middle">Acciones</th>
+                                            <th class="align-middle"></th>
+                                            <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -90,12 +91,12 @@
                                             <td class="align-middle">[[${resena.calificacion}]]</td>
                                             <td class="align-middle">[[${resena.titulo}]]</td>
                                             <td class="align-middle">[[${resena.comentario}]]</td>
-                                            <td class="align-middle">
+                                            <td class="align-middle" sec:authorize="hasRole('ROLE_ADMIN')">                                              
                                                 <a th:href="@{/resenas/eliminar/}+${resena.idResena}" class="btn btn-danger btn-sm my-1">
-                                                    <i class="fas fa-trash"></i> Eliminar
+                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                                                 </a>
                                                 <a th:href="@{/resenas/modificar/}+${resena.idResena}" class="btn btn-success btn-sm my-1">
-                                                    <i class="fas fa-pencil-alt"></i> Editar
+                                                    <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]
                                                 </a>
                                             </td>
                                         </tr>

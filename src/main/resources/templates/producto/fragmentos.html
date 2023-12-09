@@ -10,7 +10,7 @@
         <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3"> <!-- sec:authorize="hasRole('ROLE_ADMIN')"-->
+                    <div class="col-md-3" sec:authorize="hasRole('ROLE_ADMIN')"> 
                         <button 
                             type="button" 
                             class="btn btn-primary btn-block" 
@@ -120,7 +120,8 @@
                                                 <th class="text-end align-middle">Total</th>
                                                 <th class="align-middle">Stock</th>
                                                 <th class="align-middle">Pedido</th>
-                                                <th class="align-middle"></th> <!-- sec:authorize="hasRole('ROLE_ADMIN')"-->
+                                                <th class="align-middle"></th>
+                                                <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -132,15 +133,17 @@
                                                 <td class="text-center align-middle">[[${producto.cantidad}]]</td>
                                                 <td class="text-end align-middle">[[${producto.precio*producto.cantidad}]]</td>
                                                 <td class="align-middle" th:text="${producto.stock} ? 'En stock' : 'Sin stock'" />
-                                                <td class="align-middle">[[${producto.pedidos.descripcion}]]</td>
-                                                <td class="align-middle"> <!-- sec:authorize="hasRole('ROLE_ADMIN')"-->
+                                                <td class="align-middle">[[${producto.pedidos.descripcion}]]</td>                                               
+                                                    
+                                                    <td class="align-middle" sec:authorize="hasRole('ROLE_ADMIN')">                                              
                                                     <a th:href="@{/producto/eliminar/}+${producto.idProducto}" class="btn btn-danger btn-sm my-1">
                                                         <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                                                     </a>
                                                     <a th:href="@{/producto/modificar/}+${producto.idProducto}" class="btn btn-success btn-sm my-1">
                                                         <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]
                                                     </a>
-                                                </td>
+                                                    </td>
+                                                
                                             </tr>
                                         </tbody>
                                     </table>

@@ -8,7 +8,7 @@
     <body>
         <!-- 1 Sección para crear el boton de agregar... llamará a una ventana modal-->
         <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
-            <div class="container">
+            <div class="container" sec:authorize="hasRole('ROLE_ADMIN')">
                 <div class="row">
                     <div class="col-md-3">   
                         <button 
@@ -79,14 +79,15 @@
                                             <th class="align-middle">Descripción</th>
                                             <th class="align-middle">Estado</th>
                                             <th class="align-middle"></th>
+                                            <th sec:authorize="hasRole('ROLE_ADMIN')" ></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr th:each="pedidos, contador : ${pedidoss}">
                                             <td class="align-middle" th:text="${contador.count}"></td>
                                             <td class="align-middle" th:text="${pedidos.descripcion}"></td>
-                                            <td class="align-middle" th:text="${pedidos.pagado} ? 'Pagado' : 'Sin pagar'"></td>
-                                            <td class="align-middle">
+                                            <td class="align-middle" th:text="${pedidos.pagado} ? 'Pagado' : 'Sin pagar'"></td>                                          
+                                                <td class="align-middle" sec:authorize="hasRole('ROLE_ADMIN')">
                                                 <a th:href="@{/pedidos/eliminar/}+${pedidos.idPedido}" class="btn btn-danger btn-sm my-1">
                                                     <i class="fas fa-trash"></i> Eliminar</a>
                                                 <a th:href="@{/pedidos/modificar/}+${pedidos.idPedido}" class="btn btn-success btn-sm my-1">
@@ -169,12 +170,12 @@
                             <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
                         </a>
                     </div>
-                    <div class="col-md-4 text-center mb-1">
+                    <div class="col-md-4 text-center mb-1" sec:authorize="hasRole('ROLE_ADMIN')">
                         <a th:href="@{/pedidos/eliminar/}+${pedidos.idPedido}" class="btn btn-outline-danger">
                             <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                         </a>
                     </div>
-                    <div class="col-md-4 text-center mb-1">
+                    <div class="col-md-4 text-center mb-1" sec:authorize="hasRole('ROLE_ADMIN')">
                         <button type="submit" class="btn btn-outline-success">
                             <i class="fas fa-check"></i> [[#{accion.guardar}]]
                         </button>
