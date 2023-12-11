@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Tienda Online</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}" />
+    <link rel="stylesheet" th:href="@{/css/estilos.css}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/rutinas.js}"></script>
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 20px 0;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar-toggler {
+            border-color: #ffffff;
+        }
+
+        .navbar-toggler-icon {
+            background-color: #ffffff;
+        }
+
+        .navbar-nav .nav-link {
+            color: black;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #f8f9fa;
+        }
+
+        #main-header {
+            background-color: #0056b3;
+            color: #ffffff;
+            padding: 20px 0;
+        }
+
+        #main-header h1 {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: #007bff;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        .copyright-logo {
+            font-size: 14px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a th:href="@{/}" class="navbar-brand">Tu Tienda Online</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav ml-auto" sec:authorize="hasRole('ROLE_VENDEDOR')">
+                        <li class="nav-item"><a class="nav-link" th:href="@{/pedidos/listado}">Pedidos</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/producto/listado}">Productos</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/usuario/listado}">Clientes</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/resenas/listado}">Reseñas</a></li>
+                    </ul>
+
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item"><a class="nav-link" th:href="@{/contacto/info}">Contacto</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownLang" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Idioma</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownLang">
+                                <a class="dropdown-item" href="@{/(lang=es)}">ES</a>
+                                <a class="dropdown-item" href="@{/(lang=en)}">EN</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <section id="main-header" class="text-center">
+            <div class="container">
+                <h1><i class="fas fa-shopping-cart"></i> Tu Tienda</h1>
+            </div>
+        </section>
+        <section id="main-header" class="text-center ">
+            <ul class="navbar-nav" sec:authorize='!isAuthenticated()'>
+                <li class='nav-item px-2'>
+                    <a class="nav-link" th:href="@{/login}">
+                        <i class='fas fa-sign-in-alt'> Iniciar Sesion</i>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav" sec:authorize='isAuthenticated()'>
+                <li class='nav-item text-white my-auto'>
+                    <img th:src='@{${session.usuarioImagen}}' height="40" class='rounded-circle mr-2 user-profile-img'/>
+                    <span class="user-name" sec:authentication='name'>Jhon</span>
+                </li>
+                <li class='nav-item text-white my-auto'>
+                    <form method="post" th:action='@{/logout}'>
+                        <button class='btn btn-dark' type="submit">
+                            <i class='fas fa-sign-out-alt'></i>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </section>
+    </header>
+    <footer th:fragment="footer">
+        <p>&copy; 2023 Tu Tienda Online. Todos los derechos reservados. <i class="fas fa-copyright copyright-logo"></i></p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>ProyectoG7</title>
+    </head>
+    <body>
+        <!-- 1 Sección para crear el boton de agregar... llamará a una ventana modal-->
+        <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3" sec:authorize="hasRole('ROLE_ADMIN')"> 
+                        <button 
+                            type="button" 
+                            class="btn btn-primary btn-block" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#agregarProducto">
+                            <i class="fas fa-plus"></i> [[#{producto.agregar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2 Fragmento para agregar producto, es la ventana modal -->
+        <section th:fragment="agregarProducto">
+            <div id="agregarProducto" 
+                 class="modal fade" 
+                 tabindex="-1" 
+                 aria-labelledby="exampleModalLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title">[[#{producto.agregar}]]</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> 
+                        <form th:action="@{/producto/guardar}" th:object="${producto}"
+                              method="POST" class="was-validated" enctype="multipart/form-data">
+                            <div class="modal-body">
+
+                                <!-- Agregar secciones a agregar producto -->
+                                <div class="mb-3">
+                                    <label for="idPedido">Nombre del pedido</label>
+                                    <select class="form-select" 
+                                            aria-label="Default select example"
+                                            name="pedidos.idPedido">
+
+                                        <option th:each="c : ${pedidoss}"
+                                                th:value="${c.idPedido}" 
+                                                th:text="${c.descripcion}">                             
+                                        </option>
+
+                                    </select>
+
+                                    <!-- <input type="number" class="form-control" name="idPedido" required="true"/>-->
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="nombre">Nombre del producto</label>
+                                    <input type="text" class="form-control" name="nombre" required="true"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="descripcion">[[#{producto.descripcion}]]</label>
+                                    <input type="text" class="form-control" name="descripcion" required="true"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="precio">[[#{producto.precio}]]</label>
+                                    <input type="number" class="form-control" name="precio" />
+                                </div>             
+
+                                <div class="mb-3">
+                                    <label for="cantidad">Cantidad</label>
+                                    <input type="number" class="form-control" name="cantidad"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="imagen">[[#{producto.imagen}]]</label>
+                                    <input class="form-control" type="file" name="imagenFile" onchange="readURL(this);"/>
+                                    <img id="blah" src="#" alt="your image" height="200"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="stock">Stock</label>
+                                    <input class="form-check-input mx-2" type="checkbox" name="stock" id="stock"/>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 Sección principal para mostrar la informaccion de la entidad producto -->
+        <section th:fragment="listadoProductos" id="productos">
+            <section th:fragment="listadoPedidoss" id="pedidoss">
+                <div class="container mt-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header bg-dark text-white">
+                                    <h4 class="mb-0">Listado de Productos</h4>
+                                </div>
+                                <div th:if="${productos != null and !productos.empty}">
+                                    <table class="table table-bordered table-hover">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th class="align-middle">#</th>
+                                                <th class="align-middle">Nombre</th>
+                                                <th class="align-middle">Descripcion</th>
+                                                <th class="text-end align-middle">Precio</th>
+                                                <th class="text-center align-middle">Cantidad</th>
+                                                <th class="text-end align-middle">Total</th>
+                                                <th class="align-middle">Stock</th>
+                                                <th class="align-middle">Pedido</th>
+                                                <th class="align-middle"></th>
+                                                <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="producto, contador : ${productos}">
+                                                <td class="align-middle">[[${contador.count}]]</td>
+                                                <td class="align-middle">[[${producto.nombre}]]</td>
+                                                <td class="align-middle">[[${producto.descripcion}]]</td>
+                                                <td class="text-end align-middle">[[${producto.precio}]]</td>
+                                                <td class="text-center align-middle">[[${producto.cantidad}]]</td>
+                                                <td class="text-end align-middle">[[${producto.precio*producto.cantidad}]]</td>
+                                                <td class="align-middle" th:text="${producto.stock} ? 'En stock' : 'Sin stock'" />
+                                                <td class="align-middle">[[${producto.pedidos.descripcion}]]</td>                                               
+                                                    
+                                                    <td class="align-middle" sec:authorize="hasRole('ROLE_ADMIN')">                                              
+                                                    <a th:href="@{/producto/eliminar/}+${producto.idProducto}" class="btn btn-danger btn-sm my-1">
+                                                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                                    </a>
+                                                    <a th:href="@{/producto/modificar/}+${producto.idProducto}" class="btn btn-success btn-sm my-1">
+                                                        <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]
+                                                    </a>
+                                                    </td>
+                                                
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-center p-3" th:if="${productos == null or productos.empty}">
+                                    <span>[[#{lista.vacia}]]</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <section th:fragment="total" id="pedidoss" class="text-center my-4">
+            <div class="col-md-4 mx-auto mb-5">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h3 class="card-title">Total Productos</h3>
+                        <h4 class="card-text fs-2"><i class="fas fa-shopping-basket"></i> [[${totalProductos}]]</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4 Fragmento que se utiliza en la página modifca.html -->
+        <section th:fragment="editarProducto">
+            <div class="container mt-3 mb-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <form method="POST"
+                              th:action="@{/producto/guardar}" 
+                              th:object="${producto}"
+                              class="was-validated"                          
+                              enctype="multipart/form-data">
+                            <input type="hidden" name="idProducto" th:field="*{idProducto}"/>
+                            <input type="hidden" name="rutaImagen" th:field="*{rutaImagen}"/>
+                            <section th:replace="~{producto/fragmentos :: botonesEditar}"/>
+
+                            <div id=details>
+
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>[[#{accion.actualizar}]]</h4>
+                                    </div>
+
+                                    <div class="card-body">
+
+                                        <div class="mb-3">
+                                            <label for="idPedido">Nombre del pedido</label>
+                                            <select class="form-select" 
+                                                    aria-label="Default select example"
+                                                    name="pedidos.idPedido">
+
+                                                <option th:each="c : ${pedidoss}"
+                                                        th:value="${c.idPedido}" 
+                                                        th:text="${c.descripcion}">                             
+                                                </option>
+
+                                            </select>
+
+                                            <!-- <input type="number" class="form-control" name="idPedido" required="true"/>-->
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="nombre">Nombre del producto</label>
+                                            <input type="text" class="form-control" name="nombre" th:field="*{nombre}"/>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="descripcion">[[#{producto.descripcion}]]</label>
+                                            <input type="text" class="form-control" name="descripcion" th:field="*{descripcion}"/>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="precio">[[#{producto.precio}]]</label>
+                                            <input type="number" class="form-control" name="precio" th:field="*{precio}"/>
+                                        </div>             
+
+                                        <div class="mb-3">
+                                            <label for="cantidad">Cantidad</label>
+                                            <input type="number" class="form-control" name="cantidad" th:field="*{cantidad}"/>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="imagen">[[#{producto.imagen}]]</label>
+                                            <input class="form-control" type="file" name="imagenFile"
+                                                   onchange="readURL(this);" />
+                                            <img id="blah" th:src="@{${producto.rutaImagen}}" alt="your image" height="200"/>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="stock">Stock</label>
+                                            <input class="form-check-input mx-2" type="checkbox" name="stock" id="stock" th:field="*{stock}"/>
+                                        </div>
+
+                                    </div>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+        </section>
+
+        <!-- 5 Fragmento que se utiliza en el fragmento anterior -->
+        <section th:fragment="botonesEditar">
+            <div class="container py-4 mb-4">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-1">
+                        <a th:href="@{/producto/listado}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-center mb-1">
+                        <a th:href="@{/producto/eliminar/}+${producto.idProducto}" class="btn btn-outline-danger">
+                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-center mb-1">
+                        <button type="submit" class="btn btn-outline-success">
+                            <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

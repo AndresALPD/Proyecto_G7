@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>ProyectoG7</title>
+    </head>
+    <body>
+        <!-- 1 Sección para crear el boton de agregar... llamará a una ventana modal-->
+        <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
+            <div class="container" sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="row">
+                    <div class="col-md-3">   
+                        <button 
+                            type="button" 
+                            class="btn btn-primary btn-block" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#agregarPedidos">
+                            <i class="fas fa-plus"></i> Agregar Pedido
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2 Fragmento para agregar pedidos, es la ventana modal -->
+        <section th:fragment="agregarPedidos">
+            <div id="agregarPedidos" 
+                 class="modal fade" 
+                 tabindex="-1" 
+                 aria-labelledby="exampleModalLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title">Agregar Pedido</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> 
+                        <form th:action="@{/pedidos/guardar}" th:object="${pedidos}"
+                              method="POST" class="was-validated" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="descripcion">Descripción del pedido</label>
+                                    <input type="text" class="form-control" name="descripcion" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pagado">Pagado</label>
+                                    <input class="form-check-input mx-2" type="checkbox" name="pagado" id="pagado"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="imagen">Imagen</label>
+                                    <input class="form-control" type="file" name="imagenFile" onchange="readURL(this);"/>
+                                    <img id="blah" src="#" alt="your image" height="200"/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 Sección principal para mostrar la informaccion de la entidad pedidos -->
+        <section th:fragment="listadoPedidoss" id="pedidoss">
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-dark text-white">
+                                <h4 class="mb-0">Listado de Pedidos</h4>
+                            </div>
+                            <div th:if="${pedidoss != null and !pedidoss.empty}">
+                                <table class="table table-bordered table-hover">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th class="align-middle">#</th>
+                                            <th class="align-middle">Descripción</th>
+                                            <th class="align-middle">Estado</th>
+                                            <th class="align-middle"></th>
+                                            <th sec:authorize="hasRole('ROLE_ADMIN')" ></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="pedidos, contador : ${pedidoss}">
+                                            <td class="align-middle" th:text="${contador.count}"></td>
+                                            <td class="align-middle" th:text="${pedidos.descripcion}"></td>
+                                            <td class="align-middle" th:text="${pedidos.pagado} ? 'Pagado' : 'Sin pagar'"></td>                                          
+                                                <td class="align-middle" sec:authorize="hasRole('ROLE_ADMIN')">
+                                                <a th:href="@{/pedidos/eliminar/}+${pedidos.idPedido}" class="btn btn-danger btn-sm my-1">
+                                                    <i class="fas fa-trash"></i> Eliminar</a>
+                                                <a th:href="@{/pedidos/modificar/}+${pedidos.idPedido}" class="btn btn-success btn-sm my-1">
+                                                    <i class="fas fa-pencil-alt"></i> Actualizar</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-3" th:if="${pedidoss == null or pedidoss.empty}">
+                                <span>Lista vacía</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section th:fragment="total" id="pedidoss" class="text-center my-4">
+            <div class="col-md-4 mx-auto mb-5">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h3 class="card-title">Total Pedidos</h3>
+                        <h4 class="card-text fs-2"><i class="fas fa-shopping-basket"></i> [[${totalPedidoss}]]</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 4 Fragmento que se utiliza en la página modifca.html -->
+        <section th:fragment="editarPedidos">
+            <div class="container mt-3 mb-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <form method="POST"
+                              th:action="@{/pedidos/guardar}" 
+                              th:object="${pedidos}"
+                              class="was-validated"                          
+                              enctype="multipart/form-data">
+                            <input type="hidden" name="idPedido" th:field="*{idPedido}" />
+                            <input type="hidden" name="rutaImagen" th:field="*{rutaImagen}" />
+                            <section th:replace="~{pedidos/fragmentos :: botonesEditar}" />
+                            <div id="details">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>[[#{accion.actualizar}]]</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="descripcion">Descripción del pedido</label>
+                                            <input type="text" class="form-control" 
+                                                   name="descripcion" th:field="*{descripcion}" required="true">
+                                        </div>
+                                        <div class="mb-3 form-check">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   name="pagado" id="pagado" th:field="*{pagado}">
+                                                <label class="form-check-label" for="pagado">Pagado</label>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="imagen">Imagen</label>
+                                            <input class="form-control" type="file" name="imagenFile" onchange="readURL(this);" />
+                                            <img id="blah" th:src="@{${pedidos.rutaImagen}}" alt="your image" height="200"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 Fragmento que se utiliza en el fragmento anterior -->
+        <section th:fragment="botonesEditar">
+            <div class="container py-4 mb-4">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-1">
+                        <a th:href="@{/pedidos/listado}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-center mb-1" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{/pedidos/eliminar/}+${pedidos.idPedido}" class="btn btn-outline-danger">
+                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-center mb-1" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <button type="submit" class="btn btn-outline-success">
+                            <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
