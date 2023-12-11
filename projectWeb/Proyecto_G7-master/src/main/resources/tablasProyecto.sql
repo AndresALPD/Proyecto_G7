@@ -1,4 +1,4 @@
---Base de datos nombre Proyecto
+-- Base de datos nombre Proyecto
 
 drop schema if exists proyecto;
 drop user if exists usuario_proyecto;
@@ -56,8 +56,24 @@ INSERT INTO proyecto.producto (id_producto, id_pedido, nombre, descripcion, prec
 (14, 5, 'Sillón Mainstays, Reclinable Doble Blackberry', 'Sillón Mainstays, Reclinable Doble Blackberry', 229900, 5, 'https://walmartcr.vtexassets.com/arquivos/ids/456375-800-600?v=638319549704070000&width=800&height=600&aspect=true', true),
 (15, 5, 'Pelotas de tenis Athletic works. Modelo WCO2101', 'Pelotas de tenis, 15 piezas por juego', 5500, 10, 'https://walmartcr.vtexassets.com/arquivos/ids/344848-800-600?v=637998251332500000&width=800&height=600&aspect=true', true);
 
+CREATE TABLE proyecto.resenas (
+    id_resena INT PRIMARY KEY AUTO_INCREMENT,
+    id_producto INT NOT NULL,
+    calificacion INT,
+    titulo VARCHAR(255),
+    comentario TEXT,
+    FOREIGN KEY fk_resena_producto (id_producto) REFERENCES proyecto.producto(id_producto)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+INSERT INTO proyecto.resenas (id_producto, calificacion, titulo, comentario) VALUES
+(1, 5, 'Excelente producto', 'Me encanta este producto, excelente.'),
+(2, 4, 'Bueno', 'Lo recomiendo.'),
+(3, 3, 'Regular', 'No es mi favorito.');
+
 CREATE TABLE proyecto.contacto (
-    id_contacto INT PRIMARY KEY AUTO_INCREMENT,
+	id_contacto INT PRIMARY KEY AUTO_INCREMENT,
     descripcion TEXT,
     telefono text,
     ubicacion varchar(1024),
@@ -72,20 +88,6 @@ INSERT INTO proyecto.contacto (id_contacto, descripcion, telefono, ubicacion, ho
   '8572 8468', 'https://www.openstreetmap.org/note/3998061#map=18/9.85816/-83.94015&layers=N',
   'De Lunes a Domingo de 5:30 p.m a 10:30 p.m', 'https://www.facebook.com/sodadivinonino/?locale=es_LA');
 
-CREATE TABLE proyecto.resenas (
-    id_resena INT PRIMARY KEY AUTO_INCREMENT,
-    calificacion INT,
-    titulo VARCHAR(255),
-    comentario TEXT
-)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET utf8mb4;
-
-INSERT INTO proyecto.resenas (calificacion, titulo, comentario) VALUES
-(5, 'Excelente producto', 'Me encanta este producto, excelente.'),
-(4, 'Bueno', 'Lo recomiendo.'),
-(3, 'Regular', 'No es mi favorito.');
-
 CREATE TABLE proyecto.usuario (
   id_usuario INT NOT NULL AUTO_INCREMENT,
   username varchar(20) NOT NULL,
@@ -96,20 +98,20 @@ CREATE TABLE proyecto.usuario (
   telefono VARCHAR(15) NULL,
   ruta_imagen varchar(1024),
   activo boolean,
-  PRIMARY KEY (`id_usuario`));
+  PRIMARY KEY (id_usuario));
 
 INSERT INTO proyecto.usuario (id_usuario, username, password, nombre, apellidos, correo, telefono, ruta_imagen, activo)
 VALUES 
-(1, 'luis', '202cb962ac59075b964b07152d234b70', 'Luis', 'Pérez', 'luisperez@gmail.com', '123456789', 'https://static.vecteezy.com/system/resources/previews/001/131/187/non_2x/serious-man-portrait-real-people-high-definition-grey-background-photo.jpg', true),
-(2, 'laura', '250cf8b51c773f3f8dc8b4be867a9a02', 'Laura', 'López', 'lauralopez@gmail.com', '987654321', 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?cs=srgb&dl=pexels-andrea-piacquadio-774909.jpg&fm=jpg', true),
-(3, 'valeria', '68053af2923e00204c3ca7c6a3150cf7', 'Valeria', 'Gómez', 'valeriagomez@gmail.com', '555555555', 'https://pymstatic.com/5844/conversions/personas-emocionales-wide.jpg', true);
+(1, 'luis', '$2a$10$P1.w58XvnaYQUQgZUCk4aO/RTRl8EValluCqB3S2VMLTbRt.tlre.', 'Luis', 'Pérez', 'luisperez@gmail.com', '123456789', 'https://static.vecteezy.com/system/resources/previews/001/131/187/non_2x/serious-man-portrait-real-people-high-definition-grey-background-photo.jpg', true),
+(2, 'laura', '$2a$10$GkEj.ZzmQa/aEfDmtLIh3udIH5fMphx/35d0EYeqZL5uzgCJ0lQRi', 'Laura', 'López', 'lauralopez@gmail.com', '987654321', 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?cs=srgb&dl=pexels-andrea-piacquadio-774909.jpg&fm=jpg', true),
+(3, 'valeria', '$2a$10$koGR7eS22Pv5KdaVJKDcge04ZB53iMiw76.UjHPY.XyVYlYqXnPbO', 'Valeria', 'Gómez', 'valeriagomez@gmail.com', '555555555', 'https://pymstatic.com/5844/conversions/personas-emocionales-wide.jpg', true);
 
 create table proyecto.rol (
   id_rol INT NOT NULL AUTO_INCREMENT,
   nombre varchar(20),
   id_usuario int,
   PRIMARY KEY (id_rol),
-  foreign key fk_rol_usuario (id_usuario) references usuario(id_usuario)
+  foreign key fk_rol_usuario (id_usuario) references usuario(id_usuario) ON DELETE CASCADE
 );
 
 insert into proyecto.rol (id_rol, nombre, id_usuario) values
